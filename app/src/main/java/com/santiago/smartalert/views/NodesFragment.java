@@ -1,5 +1,7 @@
 package com.santiago.smartalert.views;
 
+import android.app.FragmentManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -23,6 +25,11 @@ import retrofit2.Response;
 public class NodesFragment extends Fragment {
     private RecyclerView recyclerView;
     private NodeAdapter nodeAdapter;
+    Comunicador comunicador;
+
+    public interface Comunicador {
+        public void navegateToNodeDetail(String node_name);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,23 +43,31 @@ public class NodesFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(rootView.getContext(), 1));
 
-        /*nodeAdapter.setOnItemClickListener(new NodeAdapter.ClickListener() {
+        nodeAdapter.setOnItemClickListener(new NodeAdapter.ClickListener() {
             @Override
             public void onItemClick(int position, View v) {
-                Intent frmMain = new Intent(MainActivity.this, NodeDetailActivity.class);
-                frmMain.putExtra("NODE_NAME", nodeAdapter.getNodeByPosition(position).getName());
-                startActivity(frmMain);
+                comunicador.navegateToNodeDetail(nodeAdapter.getNodeByPosition(position).getName());
+
+                //Intent frmMain = new Intent(MainActivity.this, NodeDetailActivity.class);
+                //frmMain.putExtra("NODE_NAME", nodeAdapter.getNodeByPosition(position).getName());
+                //startActivity(frmMain);
             }
 
             @Override
             public void onItemLongClick(int position, View v) {
                 Log.e("ggtets", "onItemLongClick pos = " + position);
             }
-        });*/
+        });
 
         getNodes();
 
         return rootView;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        comunicador = (Comunicador) context;
+        super.onAttach(context);
     }
 
     private void getNodes()

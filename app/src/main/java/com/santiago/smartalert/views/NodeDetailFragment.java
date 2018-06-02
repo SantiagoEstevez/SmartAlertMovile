@@ -1,23 +1,22 @@
 package com.santiago.smartalert.views;
 
-import android.app.Fragment;
-import android.content.Intent;
+import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.santiago.smartalert.R;
-import com.santiago.smartalert.adapters.NodeAdapter;
 
-public class EventsFragment extends Fragment {
+public class NodeDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_events, container, false);
+        Log.e("ggtets", "estoy en el detalle y vine de: " + getArguments().getString("nodeName"));
+        return inflater.inflate(R.layout.fragment_node_detail, container, false);
     }
 }

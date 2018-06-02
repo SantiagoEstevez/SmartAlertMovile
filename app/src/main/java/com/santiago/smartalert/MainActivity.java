@@ -17,6 +17,8 @@ import android.view.MenuItem;
 
 import com.santiago.smartalert.api.ApiService;
 import com.santiago.smartalert.api.ServiceGenerator;
+import com.santiago.smartalert.views.EventsFragment;
+import com.santiago.smartalert.views.NodeDetailFragment;
 import com.santiago.smartalert.views.NodesFragment;
 
 import java.util.ArrayList;
@@ -26,7 +28,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, NodesFragment.Comunicador {
+
+    private final static String TAG_NODE = "TAG_NODE";
+    FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +58,8 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.contenedor, new NodesFragment()).commit();
+        fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.contenedor, new NodesFragment()).addToBackStack(null).commit();
     }
 
     @Override
@@ -92,14 +97,14 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        FragmentManager fragmentManager = getFragmentManager();
+
 
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
             fragmentManager.beginTransaction().replace(R.id.contenedor, new NodesFragment()).commit();
         } else if (id == R.id.nav_gallery) {
-
+            fragmentManager.beginTransaction().replace(R.id.contenedor, new EventsFragment()).addToBackStack(TAG_NODE).commit();
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
@@ -113,5 +118,16 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void navegateToNodeDetail(String node_name) {
+        Bundle bundle = new Bundle();
+        bundle.putString("nodeName", node_name);
+
+        NodeDetailFragment nodeDetail = new NodeDetailFragment();
+        nodeDetail.setArguments(bundle);
+
+        fragmentManager.beginTransaction().replace(R.id.contenedor, nodeDetail).addToBackStack(TAG_NODE).commit();
     }
 }
