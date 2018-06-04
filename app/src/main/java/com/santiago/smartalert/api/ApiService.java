@@ -3,6 +3,7 @@ package com.santiago.smartalert.api;
 import com.santiago.smartalert.models.Node.NodeDrive;
 import com.santiago.smartalert.models.Node.NodeHead;
 import com.santiago.smartalert.models.Node.NodeRAM;
+import com.santiago.smartalert.models.token;
 
 import java.util.ArrayList;
 
@@ -17,7 +18,7 @@ import retrofit2.http.Path;
 
 public interface ApiService {
     @GET("token")
-    Call<ResponseBody> login();
+    Call<token> login();
 
     @GET("nodes")
     Call<ArrayList<String>> getNodes();

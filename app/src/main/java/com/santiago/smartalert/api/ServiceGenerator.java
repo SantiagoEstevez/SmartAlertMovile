@@ -1,5 +1,9 @@
 package com.santiago.smartalert.api;
 
+import android.text.TextUtils;
+import android.util.Log;
+
+import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -11,6 +15,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ServiceGenerator {
     //private static final String BASE_URL = "http://172.16.104.83:8080/Proyecto2018/rest/seguridad/";
     private static final String BASE_URL = "http://10.0.2.2:52087/api/values/";
+    private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
     private static Retrofit.Builder builder =
             new Retrofit.Builder()
@@ -19,10 +24,46 @@ public class ServiceGenerator {
 
     private static Retrofit retrofit = builder.build();
 
-    private static OkHttpClient.Builder httpClient =
-            new OkHttpClient.Builder();
-
     public static <S> S createService(Class<S> serviceClass) {
+        return retrofit.create(serviceClass);
+    }
+
+    public static <S> S createService(
+            Class<S> serviceClass, String username, String password) {
+        if (!TextUtils.isEmpty(username)
+                && !TextUtils.isEmpty(password)) {
+            String authToken = Credentials.basic(username, password);
+
+            AuthenticationInterceptor interceptor =
+                    new AuthenticationInterceptor("Authorization", authToken);
+
+            if (!httpClient.interceptors().contains(interceptor)) {
+                httpClient.addInterceptor(interceptor);
+
+                builder.client(httpClient.build());
+                retrofit = builder.build();
+            }
+
+            return retrofit.create(serviceClass);
+        }
+
+        return retrofit.create(serviceClass);
+    }
+
+    public static <S> S createService(
+            Class<S> serviceClass, final String authToken) {
+        if (!TextUtils.isEmpty(authToken)) {
+            AuthenticationInterceptor interceptor =
+                    new AuthenticationInterceptor("SecurityToken", authToken);
+
+            if (!httpClient.interceptors().contains(interceptor)) {
+                httpClient.addInterceptor(interceptor);
+
+                builder.client(httpClient.build());
+                retrofit = builder.build();
+            }
+        }
+
         return retrofit.create(serviceClass);
     }
 }

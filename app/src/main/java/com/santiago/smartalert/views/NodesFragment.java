@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.santiago.smartalert.R;
 import com.santiago.smartalert.adapters.NodeAdapter;
 import com.santiago.smartalert.api.ApiService;
+import com.santiago.smartalert.api.AuthService;
 import com.santiago.smartalert.api.ServiceGenerator;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class NodesFragment extends Fragment {
     private RecyclerView recyclerView;
     private NodeAdapter nodeAdapter;
     Comunicador comunicador;
+    View rootView;
 
     public interface Comunicador {
         public void navegateToNodeDetail(String node_name);
@@ -35,7 +37,7 @@ public class NodesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_nodes, container, false);
+        rootView = inflater.inflate(R.layout.fragment_nodes, container, false);
 
         nodeAdapter = new NodeAdapter(rootView.getContext());
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
@@ -72,7 +74,7 @@ public class NodesFragment extends Fragment {
 
     private void getNodes()
     {
-        ApiService service = ServiceGenerator.createService(ApiService.class);
+        ApiService service = ServiceGenerator.createService(ApiService.class, AuthService.getToken(rootView.getContext()));
         Call<ArrayList<String>> respuesta = service.getNodes();
 
         respuesta.enqueue(new Callback<ArrayList<String>>() {
