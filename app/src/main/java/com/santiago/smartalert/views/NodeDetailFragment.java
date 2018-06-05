@@ -1,5 +1,6 @@
 package com.santiago.smartalert.views;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
@@ -9,38 +10,117 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.santiago.smartalert.R;
+import com.santiago.smartalert.api.ApiService;
+import com.santiago.smartalert.api.AuthService;
+import com.santiago.smartalert.api.ServiceGenerator;
+import com.santiago.smartalert.models.Node.NodeDrive;
+import com.santiago.smartalert.models.Node.NodeRAM;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class NodeDetailFragment extends Fragment {
+    View rootView;
+    PieChart chartRAM;
+    PieChart chartDrive;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_node_detail, container, false);
-        PieChart chart = (PieChart) rootView.findViewById(R.id.chart);
-        chart.setUsePercentValues(true);
-        chart.getDescription().setEnabled(false);
+        rootView = inflater.inflate(R.layout.fragment_node_detail, container, false);
+        String nodeName = getArguments().getString("nodeName");
 
-        chart.setDragDecelerationFrictionCoef(0.15f);
+        getNodeRam(nodeName);
+        getNodeDrive(nodeName);
+        return rootView;
+    }
 
-        chart.setDrawHoleEnabled(true);
-        chart.setHoleColor(Color.WHITE);
-        chart.setTransparentCircleRadius(61f);
+    private void getNodeRam(String nodeName)
+    {
+        ApiService service = ServiceGenerator.createService(ApiService.class, AuthService.getToken(rootView.getContext()));
+        Call<NodeRAM> respuesta = service.getNodeRAM(nodeName);
+
+        respuesta.enqueue(new Callback<NodeRAM>() {
+            @Override
+            public void onResponse(Call<NodeRAM> call, Response<NodeRAM> response) {
+                if (response.isSuccessful())
+                {
+                    NodeRAM oRam = response.body();
+                    createGraphRam(oRam);
+                    TextView text = (TextView) rootView.findViewById(R.id.title);
+                    text.setText("este es el titulo");
+                }
+                else
+                {
+                    Log.e("ggtets", response.errorBody().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<NodeRAM> call, Throwable t) {
+                Log.e("test", "error2");
+            }
+        });
+    }
+
+    private void getNodeDrive(String nodeName)
+    {
+        ApiService service = ServiceGenerator.createService(ApiService.class, AuthService.getToken(rootView.getContext()));
+        Call<NodeDrive> respuesta = service.getNodeDrive(nodeName);
+
+        respuesta.enqueue(new Callback<NodeDrive>() {
+            @Override
+            public void onResponse(Call<NodeDrive> call, Response<NodeDrive> response) {
+                if (response.isSuccessful())
+                {
+                    NodeDrive oDrive = response.body();
+                    createGraphDrive(oDrive);
+                }
+                else
+                {
+                    Log.e("ggtets", response.errorBody().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<NodeDrive> call, Throwable t) {
+                Log.e("test", "error2");
+            }
+        });
+    }
+
+    private void createGraphRam(NodeRAM oRam){
+        chartRAM = (PieChart) rootView.findViewById(R.id.ram_chart);
+        //chart.setUsePercentValues(true);
+        chartRAM.getDescription().setEnabled(false);
+
+        chartRAM.setDragDecelerationFrictionCoef(0.15f);
+
+        chartRAM.setDrawHoleEnabled(true);
+        chartRAM.setHoleColor(Color.WHITE);
+        chartRAM.setTransparentCircleRadius(61f);
 
         ArrayList<PieEntry> yValues = new ArrayList<>();
-        yValues.add(new PieEntry(34f, "exto1"));
-        yValues.add(new PieEntry(23f, "exto2"));
+        yValues.add(new PieEntry(oRam.getMemoriaEnUso(), getString(R.string.graph_ram_usada)));
+        yValues.add(new PieEntry(oRam.getMemoriaLibre(), getString(R.string.graph_ram_libre)));
 
-        PieDataSet dataSet = new PieDataSet(yValues, "Memoria");
+        PieDataSet dataSet = new PieDataSet(yValues, getString(R.string.graph_ram_total) + " " + oRam.getMemoriaTotal());
         dataSet.setSliceSpace(3f);
         dataSet.setSelectionShift(5f);
         dataSet.setColors(ColorTemplate.JOYFUL_COLORS);
@@ -49,9 +129,39 @@ public class NodeDetailFragment extends Fragment {
         data.setValueTextSize(10f);
         data.setValueTextColor(Color.YELLOW);
 
-        chart.setData(data);
+        chartRAM.setData(data);
+        chartRAM.invalidate();
+    }
 
+    private void createGraphDrive(NodeDrive oDrive) {
+        chartDrive = (PieChart) rootView.findViewById(R.id.drive_chart);
+        //chart.setUsePercentValues(true);
+        chartDrive.getDescription().setEnabled(false);
 
-        return rootView;
+        chartDrive.setDragDecelerationFrictionCoef(0.15f);
+
+        chartDrive.setDrawHoleEnabled(true);
+        chartDrive.setHoleColor(Color.WHITE);
+        chartDrive.setTransparentCircleRadius(61f);
+
+        float driveFree = (float) oDrive.getEspacioDisponible();
+        float driveTotal = (float) oDrive.getEspacioTotal();
+        float driveUsed = (driveTotal - driveFree);
+
+        ArrayList<PieEntry> yValues = new ArrayList<>();
+        yValues.add(new PieEntry(driveFree, getString(R.string.graph_drive_usada)));
+        yValues.add(new PieEntry(driveUsed, getString(R.string.graph_drive_libre)));
+
+        PieDataSet dataSet = new PieDataSet(yValues, getString(R.string.graph_drive_total) + " " + driveTotal);
+        dataSet.setSliceSpace(3f);
+        dataSet.setSelectionShift(5f);
+        dataSet.setColors(ColorTemplate.JOYFUL_COLORS);
+
+        PieData data = new PieData(dataSet);
+        data.setValueTextSize(10f);
+        data.setValueTextColor(Color.YELLOW);
+
+        chartDrive.setData(data);
+        chartDrive.invalidate();
     }
 }
