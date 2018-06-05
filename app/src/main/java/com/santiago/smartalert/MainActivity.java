@@ -17,6 +17,7 @@ import android.view.MenuItem;
 
 import com.santiago.smartalert.api.ApiService;
 import com.santiago.smartalert.api.ServiceGenerator;
+import com.santiago.smartalert.views.AppsFragment;
 import com.santiago.smartalert.views.EventsFragment;
 import com.santiago.smartalert.views.NodeDetailFragment;
 import com.santiago.smartalert.views.NodesFragment;
@@ -98,18 +99,12 @@ public class MainActivity extends AppCompatActivity
 
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_nodes) {
             fragmentManager.beginTransaction().replace(R.id.contenedor, new NodesFragment()).commit();
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_apps) {
+            fragmentManager.beginTransaction().replace(R.id.contenedor, new AppsFragment()).addToBackStack(TAG_NODE).commit();
+        } else if (id == R.id.nav_events) {
             fragmentManager.beginTransaction().replace(R.id.contenedor, new EventsFragment()).addToBackStack(TAG_NODE).commit();
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

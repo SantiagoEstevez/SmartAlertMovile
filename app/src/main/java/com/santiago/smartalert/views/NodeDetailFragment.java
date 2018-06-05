@@ -24,6 +24,7 @@ import com.santiago.smartalert.api.ApiService;
 import com.santiago.smartalert.api.AuthService;
 import com.santiago.smartalert.api.ServiceGenerator;
 import com.santiago.smartalert.models.Node.NodeDrive;
+import com.santiago.smartalert.models.Node.NodeHead;
 import com.santiago.smartalert.models.Node.NodeRAM;
 
 import org.w3c.dom.Text;
@@ -46,9 +47,41 @@ public class NodeDetailFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_node_detail, container, false);
         String nodeName = getArguments().getString("nodeName");
 
+        getNodeHead(nodeName);
         getNodeRam(nodeName);
         getNodeDrive(nodeName);
         return rootView;
+    }
+
+    private void getNodeHead(final String nodeName)
+    {
+        ApiService service = ServiceGenerator.createService(ApiService.class, AuthService.getToken(rootView.getContext()));
+        Call<NodeHead> respuesta = service.getNodeHead(nodeName);
+
+        respuesta.enqueue(new Callback<NodeHead>() {
+            @Override
+            public void onResponse(Call<NodeHead> call, Response<NodeHead> response) {
+                if (response.isSuccessful())
+                {
+                    NodeHead oHead = response.body();
+
+                    ((TextView) rootView.findViewById(R.id.title)).setText(nodeName);
+                    ((TextView) rootView.findViewById(R.id.distro)).setText(oHead.getDistro());
+                    ((TextView) rootView.findViewById(R.id.cpus)).setText(String.valueOf(oHead.getCantCpus()));
+                    ((TextView) rootView.findViewById(R.id.ipPublic)).setText(oHead.getIpPublica());
+                    ((TextView) rootView.findViewById(R.id.ipPrivate)).setText(oHead.getIpAddress());
+                }
+                else
+                {
+                    Log.e("ggtets", response.errorBody().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<NodeHead> call, Throwable t) {
+                Log.e("test", "error2");
+            }
+        });
     }
 
     private void getNodeRam(String nodeName)
@@ -63,8 +96,6 @@ public class NodeDetailFragment extends Fragment {
                 {
                     NodeRAM oRam = response.body();
                     createGraphRam(oRam);
-                    TextView text = (TextView) rootView.findViewById(R.id.title);
-                    text.setText("este es el titulo");
                 }
                 else
                 {
