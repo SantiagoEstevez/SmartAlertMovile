@@ -8,41 +8,34 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.santiago.smartalert.R;
-import com.santiago.smartalert.models.Node.Node;
+import com.santiago.smartalert.models.Event.Event;
 
 import java.util.ArrayList;
 
 /**
- * Created by Santiago on 27/5/2018.
+ * Created by Santiago on 5/6/2018.
  */
 
-public class NodeAdapter extends RecyclerView.Adapter<NodeAdapter.ViewHolder> {
+public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> {
     private Context context;
-    private ArrayList<Node> dataset;
+    private ArrayList<Event> dataset;
     private static ClickListener clickListener;
 
-    public NodeAdapter(Context context) {
+    public EventAdapter(Context context) {
         this.context = context;
-        this.dataset = new ArrayList<Node>();
+        this.dataset = new ArrayList<Event>();
     }
 
     @Override
-    public NodeAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.node, parent, false);
+    public EventAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.event, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(NodeAdapter.ViewHolder holder, int position) {
-        Node node = dataset.get(position);
-        holder.nameTextView.setText(node.getName());
-
-        /*holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(context, "Recycle Click" + node.getName(), Toast.LENGTH_SHORT).show();
-            }
-        });*/
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        Event event = dataset.get(position);
+        holder.nameTextView.setText(event.getNombreEvento());
     }
 
     @Override
@@ -50,10 +43,8 @@ public class NodeAdapter extends RecyclerView.Adapter<NodeAdapter.ViewHolder> {
         return this.dataset.size();
     }
 
-    public void addList(ArrayList<String> nodes) {
-        for (String nodeName : nodes) {
-            dataset.add(new Node(nodeName));
-        }
+    public void addList(ArrayList<Event> events) {
+        dataset.addAll(events);
         notifyDataSetChanged();
     }
 
@@ -71,7 +62,7 @@ public class NodeAdapter extends RecyclerView.Adapter<NodeAdapter.ViewHolder> {
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
 
-            nameTextView = (TextView) itemView.findViewById(R.id.node_name);
+            nameTextView = (TextView) itemView.findViewById(R.id.event_name);
         }
 
         @Override
@@ -87,12 +78,12 @@ public class NodeAdapter extends RecyclerView.Adapter<NodeAdapter.ViewHolder> {
     }
 
     public void setOnItemClickListener(ClickListener clickListener) {
-        NodeAdapter.clickListener = clickListener;
+        EventAdapter.clickListener = clickListener;
     }
 
-    public Node getNodeByPosition(int position)
+    public Event getNodeByPosition(int position)
     {
-        Node node = dataset.get(position);
-        return node;
+        Event event = dataset.get(position);
+        return event;
     }
 }

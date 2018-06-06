@@ -1,5 +1,6 @@
 package com.santiago.smartalert.api;
 
+import com.santiago.smartalert.models.Event.Event;
 import com.santiago.smartalert.models.Node.NodeDrive;
 import com.santiago.smartalert.models.Node.NodeHead;
 import com.santiago.smartalert.models.Node.NodeRAM;
@@ -31,4 +32,7 @@ public interface ApiService {
 
     @GET("drive/{node}")
     Call<NodeDrive> getNodeDrive(@Path(value = "node", encoded = true) String nodename);
+
+    @GET("events")
+    Call<ArrayList<Event>> getEvents();
 }
