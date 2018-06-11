@@ -61,6 +61,8 @@ public class NodesFragment extends Fragment {
             }
         });
 
+        Log.e("ggtets", "pase por nodes");
+
         getNodes();
 
         return rootView;

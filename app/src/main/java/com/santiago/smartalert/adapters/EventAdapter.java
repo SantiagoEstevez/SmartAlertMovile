@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.santiago.smartalert.R;
@@ -35,7 +36,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Event event = dataset.get(position);
-        holder.nameTextView.setText(event.getNombreEvento());
+        holder.title.setText(event.getNombreEvento());
+        holder.status.setChecked(event.isActivo());
     }
 
     @Override
@@ -55,14 +57,16 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
-        private TextView nameTextView;
+        private TextView title;
+        private Switch status;
 
         public ViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
 
-            nameTextView = (TextView) itemView.findViewById(R.id.event_name);
+            title = (TextView) itemView.findViewById(R.id.event_name);
+            status = (Switch) itemView.findViewById(R.id.event_status);
         }
 
         @Override

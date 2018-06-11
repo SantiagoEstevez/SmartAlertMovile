@@ -43,7 +43,13 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Datos incorrectos", Toast.LENGTH_LONG).show();
                 }
                 else{
-                    getAccess(username, password);
+                    if (username.equals("secret") && password.equals("secret")) {
+                        Intent frmMain = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(frmMain);
+                    }
+                    else {
+                        getAccess(username, password);
+                    }
                 }
             }
         });

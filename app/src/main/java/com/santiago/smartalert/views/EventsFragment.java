@@ -11,12 +11,22 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.santiago.smartalert.R;
-import com.santiago.smartalert.adapters.NodeAdapter;
+import com.santiago.smartalert.adapters.EventAdapter;
+import com.santiago.smartalert.api.ApiService;
+import com.santiago.smartalert.api.AuthService;
+import com.santiago.smartalert.api.ServiceGenerator;
+import com.santiago.smartalert.models.Event.Event;
+
+import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class EventsFragment extends Fragment {
     View rootView;
     private RecyclerView recyclerView;
-    private NodeAdapter nodeAdapter;
+    private EventAdapter eventAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -25,12 +35,40 @@ public class EventsFragment extends Fragment {
 
         rootView = inflater.inflate(R.layout.fragment_events, container, false);
 
-        nodeAdapter = new NodeAdapter(rootView.getContext());
+        eventAdapter = new EventAdapter(rootView.getContext());
         recyclerView = (RecyclerView) rootView.findViewById(R.id.events);
-        recyclerView.setAdapter(nodeAdapter);
+        recyclerView.setAdapter(eventAdapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(rootView.getContext(), 1));
 
+        getEvents();
+
         return rootView;
+    }
+
+    private void getEvents()
+    {
+        ApiService service = ServiceGenerator.createService(ApiService.class, AuthService.getToken(rootView.getContext()));
+        Call<ArrayList<Event>> respuesta = service.getEvents();
+
+        respuesta.enqueue(new Callback<ArrayList<Event>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Event>> call, Response<ArrayList<Event>> response) {
+                if (response.isSuccessful())
+                {
+                    ArrayList<Event> events = response.body();
+                    eventAdapter.addList(events);
+                }
+                else
+                {
+                    Log.e("ggtets", response.errorBody().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Event>> call, Throwable t) {
+                Log.e("test", "error2");
+            }
+        });
     }
 }

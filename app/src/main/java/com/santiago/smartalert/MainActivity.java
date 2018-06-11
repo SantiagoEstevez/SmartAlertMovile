@@ -1,6 +1,7 @@
 package com.santiago.smartalert;
 
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -15,10 +16,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gms.maps.MapFragment;
 import com.santiago.smartalert.api.ApiService;
 import com.santiago.smartalert.api.ServiceGenerator;
 import com.santiago.smartalert.views.AppsFragment;
 import com.santiago.smartalert.views.EventsFragment;
+import com.santiago.smartalert.views.MapsActivity;
 import com.santiago.smartalert.views.NodeDetailFragment;
 import com.santiago.smartalert.views.NodesFragment;
 
@@ -105,6 +108,9 @@ public class MainActivity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.contenedor, new AppsFragment()).addToBackStack(TAG_NODE).commit();
         } else if (id == R.id.nav_events) {
             fragmentManager.beginTransaction().replace(R.id.contenedor, new EventsFragment()).addToBackStack(TAG_NODE).commit();
+        } else if (id == R.id.nav_map) {
+            Intent frmMain = new Intent(MainActivity.this, MapsActivity.class);
+            startActivity(frmMain);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
