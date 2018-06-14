@@ -65,11 +65,17 @@ public class NodeDetailFragment extends Fragment {
                 {
                     NodeHead oHead = response.body();
 
-                    ((TextView) rootView.findViewById(R.id.title)).setText(nodeName);
-                    ((TextView) rootView.findViewById(R.id.distro)).setText(oHead.getDistro());
-                    ((TextView) rootView.findViewById(R.id.cpus)).setText(String.valueOf(oHead.getCantCpus()));
-                    ((TextView) rootView.findViewById(R.id.ipPublic)).setText(oHead.getIpPublica());
-                    ((TextView) rootView.findViewById(R.id.ipPrivate)).setText(oHead.getIpAddress());
+                    TextView title = (TextView) rootView.findViewById(R.id.title);
+                    TextView distro = (TextView) rootView.findViewById(R.id.distro);
+                    TextView cpus = (TextView) rootView.findViewById(R.id.cpus);
+                    TextView ipPub = (TextView) rootView.findViewById(R.id.ipPublic);
+                    TextView ipPriv = (TextView) rootView.findViewById(R.id.ipPrivate);
+
+                    title.setText(nodeName);
+                    distro.setText(distro.getText() + oHead.getDistro());
+                    cpus.setText(cpus.getText() + String.valueOf(oHead.getCantCpus()));
+                    ipPub.setText(ipPub.getText() + oHead.getIpPublica());
+                    ipPriv.setText(ipPriv.getText() + oHead.getIpAddress());
                 }
                 else
                 {

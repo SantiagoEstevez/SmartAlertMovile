@@ -104,8 +104,6 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_nodes) {
             fragmentManager.beginTransaction().replace(R.id.contenedor, new NodesFragment()).commit();
-        } else if (id == R.id.nav_apps) {
-            fragmentManager.beginTransaction().replace(R.id.contenedor, new AppsFragment()).addToBackStack(TAG_NODE).commit();
         } else if (id == R.id.nav_events) {
             fragmentManager.beginTransaction().replace(R.id.contenedor, new EventsFragment()).addToBackStack(TAG_NODE).commit();
         } else if (id == R.id.nav_map) {

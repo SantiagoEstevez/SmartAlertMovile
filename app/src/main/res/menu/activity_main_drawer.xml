@@ -8,10 +8,10 @@
             android:id="@+id/nav_nodes"
             android:icon="@drawable/ic_menu_send"
             android:title="Nodes" />
-        <item
+        <!--<item
             android:id="@+id/nav_apps"
             android:icon="@drawable/ic_menu_send"
-            android:title="Apps" />
+            android:title="Apps" />-->
         <item
             android:id="@+id/nav_events"
             android:icon="@drawable/ic_menu_send"
