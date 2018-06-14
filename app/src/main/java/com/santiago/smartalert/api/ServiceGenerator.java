@@ -13,7 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class ServiceGenerator {
-    //private static final String BASE_URL = "http://172.16.104.83:8080/Proyecto2018/rest/seguridad/";
+    //private static final String BASE_URL = "http://172.16.104.83:8080/Proyecto2018/rest/";
     private static final String BASE_URL = "http://10.0.2.2:52087/api/values/";
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 

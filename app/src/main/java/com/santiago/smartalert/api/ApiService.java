@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 /**
@@ -18,21 +19,28 @@ import retrofit2.http.Path;
  */
 
 public interface ApiService {
-    @GET("token")
+
+    @GET("token") //seguridad/token
     Call<token> login();
 
-    @GET("nodes")
+    @GET("nodes") //infra/listarNodos
     Call<ArrayList<String>> getNodes();
 
-    @GET("cabezal/{node}")
+    @GET("cabezal/{node}") //info/cabezal/{node}
     Call<NodeHead> getNodeHead(@Path(value = "node", encoded = true) String nodename);
 
-    @GET("RAM/{node}")
+    @GET("RAM/{node}") //info/free/{node}
     Call<NodeRAM> getNodeRAM(@Path(value = "node", encoded = true) String nodename);
 
-    @GET("drive/{node}")
+    @GET("drive/{node}") //info/infoDisco/{node}
     Call<NodeDrive> getNodeDrive(@Path(value = "node", encoded = true) String nodename);
 
-    @GET("events")
+    @GET("events") //eventos/getListaEventosG
     Call<ArrayList<Event>> getEvents();
+
+    @PUT("eventos/desactivarEG/{idEvento}")
+    Call<ResponseBody> disableEvent(@Path(value = "idEvento", encoded = true) String idEvent);
+
+    @PUT("eventos/activarEG/{idEvento}")
+    Call<ResponseBody> activeEvent(@Path(value = "idEvento", encoded = true) String idEvent);
 }
