@@ -24,6 +24,7 @@ import com.santiago.smartalert.views.EventsFragment;
 import com.santiago.smartalert.views.MapsActivity;
 import com.santiago.smartalert.views.NodeDetailFragment;
 import com.santiago.smartalert.views.NodesFragment;
+import com.santiago.smartalert.views.NotificationFragment;
 
 import java.util.ArrayList;
 
@@ -106,6 +107,8 @@ public class MainActivity extends AppCompatActivity
             fragmentManager.beginTransaction().replace(R.id.contenedor, new NodesFragment()).commit();
         } else if (id == R.id.nav_events) {
             fragmentManager.beginTransaction().replace(R.id.contenedor, new EventsFragment()).addToBackStack(TAG_NODE).commit();
+        } else if (id == R.id.nav_notif) {
+            fragmentManager.beginTransaction().replace(R.id.contenedor, new NotificationFragment()).addToBackStack(TAG_NODE).commit();
         } else if (id == R.id.nav_map) {
             Intent frmMain = new Intent(MainActivity.this, MapsActivity.class);
             startActivity(frmMain);
