@@ -1,6 +1,8 @@
 package com.santiago.smartalert.api;
 
 import com.santiago.smartalert.models.Event.Event;
+import com.santiago.smartalert.models.Logs.IpData;
+import com.santiago.smartalert.models.Logs.LogApp;
 import com.santiago.smartalert.models.Node.NodeDrive;
 import com.santiago.smartalert.models.Node.NodeHead;
 import com.santiago.smartalert.models.Node.NodeRAM;
@@ -43,6 +45,15 @@ public interface ApiService {
     Call<NodeDrive> getNodeDrive(@Path(value = "node", encoded = true) String nodename);
     //-------------- NODES -------------------
 
+    //-------------- LOG APLICACIONES -------------------
+    @GET("info/infoAgente/{node}/{from}/{to}")
+    Call<ArrayList<LogApp>> getLogsApp(@Path(value = "node", encoded = true) String node,
+                                       @Path(value = "from", encoded = true) String from,
+                                       @Path(value = "to", encoded = true) String to);
+
+    @GET("http://ipinfo.io/{ip}")
+    Call<IpData> getIpData(@Path(value = "ip", encoded = true) String node);
+    //-------------- LOG APLICACIONES -------------------
 
     //-------------- EVENTS -------------------
     //@GET("events")
@@ -66,7 +77,8 @@ public interface ApiService {
     Call<ResponseBody> unsuscribeEvent(@Path(value = "idEvento", encoded = true) String idEvent);
     //-------------- NODES -------------------
 
-    //-------------- EVENTS -------------------
+    //-------------- NOTIFICACIONES -------------------
     @GET("notis/getNotisTodas")
     Call<ArrayList<Notif>> getNotifications();
+    //-------------- NOTIFICACIONES -------------------
 }

@@ -2,6 +2,7 @@ package com.santiago.smartalert.views;
 
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -10,6 +11,20 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.santiago.smartalert.R;
+import com.santiago.smartalert.api.ApiService;
+import com.santiago.smartalert.api.AuthService;
+import com.santiago.smartalert.api.ServiceGenerator;
+import com.santiago.smartalert.models.Logs.IpData;
+import com.santiago.smartalert.models.Logs.LogApp;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -46,6 +61,120 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng uruguay = new LatLng(-34, -56);
         mMap.addMarker(new MarkerOptions().position(uruguay).title("log"));
 
+        Log.e("ipLog", "se supone q estoy antes.");
+
         mMap.moveCamera(CameraUpdateFactory.newLatLng(uruguay));
+
+        Log.e("ipLog", "Voy a cargar las marcas");
+        setMarks();
+    }
+
+    private void setMarks()
+    {
+        ApiService service = ServiceGenerator.createService(ApiService.class, AuthService.getToken(this));
+        Call<ArrayList<String>> respuesta = service.getNodes();
+
+        respuesta.enqueue(new Callback<ArrayList<String>>() {
+            @Override
+            public void onResponse(Call<ArrayList<String>> call, Response<ArrayList<String>> response) {
+                if (response.isSuccessful())
+                {
+                    ArrayList<String> nodes = response.body();
+
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    Calendar c = Calendar.getInstance();
+                    c.setTime(new Date());
+
+                    c.add(Calendar.DATE, 1);
+                    String to = dateFormat.format(c.getTime());
+
+                    c.add(Calendar.DATE, -61);
+                    String from = dateFormat.format(c.getTime());
+
+                    Log.e("ipLog", "Paso 1 casi completado. from: " + from + " to: " + to);
+
+                    for (String node : nodes) {
+                        getLogsByNode(node, from, to);
+                    }
+                }
+                else
+                {
+                    Log.e("ipLog", "Error en obtner los nodes");
+                    android.util.Log.e("ipLog", response.errorBody().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<String>> call, Throwable t) {
+                android.util.Log.e("ipLog", "error0");
+            }
+        });
+    }
+
+    private void getLogsByNode(final String node, String from, String to)
+    {
+        Log.e("ipLog", "Llamo a la url: " + node + " - " + from + " - " + to);
+
+        ApiService service = ServiceGenerator.createService(ApiService.class, AuthService.getToken(this));
+        Call<ArrayList<LogApp>> respuesta = service.getLogsApp(node, from, to);
+
+        respuesta.enqueue(new Callback<ArrayList<LogApp>>() {
+            @Override
+            public void onResponse(Call<ArrayList<LogApp>> call, Response<ArrayList<LogApp>> response) {
+                if (response.isSuccessful())
+                {
+                    ArrayList<LogApp> logs = response.body();
+
+                    Log.e("ipLog", "Paso 2");
+                    for (LogApp logapp : logs) {
+                        getIpData(node, logapp.getFromHostIp());
+                    }
+                }
+                else
+                {
+                    Log.e("ipLog", "Error en obtner los logs");
+                    Log.e("ipLog", response.errorBody().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<LogApp>> call, Throwable t) {
+                Log.e("ipLog", "error1");
+            }
+        });
+    }
+
+    private void getIpData(final String node, String ip)
+    {
+        ApiService service = ServiceGenerator.createService(ApiService.class, AuthService.getToken(this));
+        Call<IpData> respuesta = service.getIpData(ip);
+
+        respuesta.enqueue(new Callback<IpData>() {
+            @Override
+            public void onResponse(Call<IpData> call, Response<IpData> response) {
+                if (response.isSuccessful())
+                {
+                    IpData ip = response.body();
+
+                    Log.e("ipLog", "paso 3");
+                    String loc = ip.getLoc();
+                    if (!loc.isEmpty()) {
+                        String[] latlng = ip.getLoc().split(",");
+                        LatLng newMark = new LatLng(Integer.parseInt(latlng[0]), Integer.parseInt(latlng[1]));
+                        mMap.addMarker(new MarkerOptions().position(newMark).title(node + " | " + ip.getCity() + " | " + ip.getRegion()));
+                    }
+                }
+                else
+                {
+                    Log.e("ipLog", "Error en obtner la ip data");
+                    Log.e("ipLog", response.errorBody().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<IpData> call, Throwable t) {
+                Log.e("ipLog", "error3");
+            }
+        });
     }
 }
