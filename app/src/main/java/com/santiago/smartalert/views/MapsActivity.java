@@ -54,14 +54,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("log"));
-
         LatLng uruguay = new LatLng(-34, -56);
-        mMap.addMarker(new MarkerOptions().position(uruguay).title("log"));
-
-        Log.e("ipLog", "se supone q estoy antes.");
+        //mMap.addMarker(new MarkerOptions().position(uruguay).title(""));
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(uruguay));
 
@@ -117,6 +111,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         ApiService service = ServiceGenerator.createService(ApiService.class, AuthService.getToken(this));
         Call<ArrayList<LogApp>> respuesta = service.getLogsApp(node, from, to);
+        Log.e("ipLog", "Esta es la url " + respuesta.request().url());
 
         respuesta.enqueue(new Callback<ArrayList<LogApp>>() {
             @Override
@@ -125,9 +120,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 {
                     ArrayList<LogApp> logs = response.body();
 
-                    Log.e("ipLog", "Paso 2");
                     for (LogApp logapp : logs) {
-                        getIpData(node, logapp.getFromHostIp());
+                        String ip = logapp.getFromHostIp();
+
+                        if (!ip.isEmpty()) {
+                            String[] ipFragments = ip.split("\\.");
+
+                            String hola = ipFragments[0];
+
+                            //Solo paso ips que no sean privadas.
+                            if (!ipFragments[0].equals("10")) {
+                                getIpData(node, ip);
+                            }
+                        }
                     }
                 }
                 else
@@ -139,7 +144,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             @Override
             public void onFailure(Call<ArrayList<LogApp>> call, Throwable t) {
-                Log.e("ipLog", "error1");
+                Log.e("ipLog", t.toString());
             }
         });
     }
@@ -148,6 +153,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     {
         ApiService service = ServiceGenerator.createService(ApiService.class, AuthService.getToken(this));
         Call<IpData> respuesta = service.getIpData(ip);
+        Log.e("ipLog", "Esta es la url " + respuesta.request().url());
 
         respuesta.enqueue(new Callback<IpData>() {
             @Override
@@ -158,10 +164,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     Log.e("ipLog", "paso 3");
                     String loc = ip.getLoc();
-                    if (!loc.isEmpty()) {
+                    if (loc != null && !loc.isEmpty()) {
                         String[] latlng = ip.getLoc().split(",");
-                        LatLng newMark = new LatLng(Integer.parseInt(latlng[0]), Integer.parseInt(latlng[1]));
-                        mMap.addMarker(new MarkerOptions().position(newMark).title(node + " | " + ip.getCity() + " | " + ip.getRegion()));
+                        LatLng newMark = new LatLng(Double.parseDouble(latlng[0]), Double.parseDouble(latlng[1]));
+                        mMap.addMarker(new MarkerOptions().position(newMark).title(node + " | " + ip.getCity() + " | " + ip.getRegion() + " | " + ip.getIp()));
                     }
                 }
                 else
@@ -173,7 +179,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             @Override
             public void onFailure(Call<IpData> call, Throwable t) {
-                Log.e("ipLog", "error3");
+                Log.e("ipLog", t.toString());
             }
         });
     }

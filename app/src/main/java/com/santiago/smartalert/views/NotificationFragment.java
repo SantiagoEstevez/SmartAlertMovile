@@ -16,6 +16,7 @@ import com.santiago.smartalert.api.ApiService;
 import com.santiago.smartalert.api.AuthService;
 import com.santiago.smartalert.api.ServiceGenerator;
 import com.santiago.smartalert.models.Event.Event;
+import com.santiago.smartalert.models.Event.EventType;
 import com.santiago.smartalert.models.Notif.Notif;
 
 import java.util.ArrayList;
@@ -28,6 +29,8 @@ public class NotificationFragment extends Fragment {
     View rootView;
     private RecyclerView recyclerView;
     private NotificationAdapter notificationAdapter;
+    private ArrayList<EventType> eventTypes;
+    private ArrayList<Event> events;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,9 +45,61 @@ public class NotificationFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(rootView.getContext(), 1));
 
-        getNotifications();
+        getEventTypes();
 
         return rootView;
+    }
+
+    private void getEventTypes()
+    {
+        ApiService service = ServiceGenerator.createService(ApiService.class, AuthService.getToken(rootView.getContext()));
+        Call<ArrayList<EventType>> respuesta = service.getEventTypes();
+
+        respuesta.enqueue(new Callback<ArrayList<EventType>>() {
+            @Override
+            public void onResponse(Call<ArrayList<EventType>> call, Response<ArrayList<EventType>> response) {
+                if (response.isSuccessful())
+                {
+                    eventTypes = response.body();
+                    getEvents();
+                }
+                else
+                {
+                    Log.e("ggtets", response.errorBody().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<EventType>> call, Throwable t) {
+                Log.e("test", t.toString());
+            }
+        });
+    }
+
+    private void getEvents()
+    {
+        ApiService service = ServiceGenerator.createService(ApiService.class, AuthService.getToken(rootView.getContext()));
+        Call<ArrayList<Event>> respuesta = service.getEvents();
+
+        respuesta.enqueue(new Callback<ArrayList<Event>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Event>> call, Response<ArrayList<Event>> response) {
+                if (response.isSuccessful())
+                {
+                    events = response.body();
+                    getNotifications();
+                }
+                else
+                {
+                    Log.e("ggtets", response.errorBody().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Event>> call, Throwable t) {
+                Log.e("test", t.toString());
+            }
+        });
     }
 
     private void getNotifications()
@@ -58,6 +113,19 @@ public class NotificationFragment extends Fragment {
                 if (response.isSuccessful())
                 {
                     ArrayList<Notif> notifs = response.body();
+                    for (Notif notif : notifs) {
+                        for (Event event : events) {
+                            if (event.getIdEvento() == notif.getId_evento_global()) {
+                                notif.setNombre_evento_global(event.getNombreEvento());
+                            }
+                        }
+
+                        for (EventType eventTyoe : eventTypes) {
+                            if (eventTyoe.getId_tipo() == notif.getTipo()) {
+                                notif.setNombre_tipo(eventTyoe.getNombre_tipo());
+                            }
+                        }
+                    }
                     notificationAdapter.addList(notifs);
                 }
                 else

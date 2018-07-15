@@ -47,8 +47,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final Notif notif = dataset.get(position);
-        holder.title.setText("Id de evento: "+ notif.getId_evento_global() + " por " + notif.getCondicion_dispara());
+        holder.title.setText(notif.getNombre_evento_global());
         holder.fecha.setText(notif.getFecha_dispara());
+        holder.detail.setText(notif.getNombre_tipo() + " " + notif.getCondicion_dispara());
     }
 
     @Override
@@ -69,6 +70,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
         private TextView title;
         private TextView fecha;
+        private TextView detail;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -76,6 +78,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
             title = (TextView) itemView.findViewById(R.id.notification_name);
             fecha = (TextView) itemView.findViewById(R.id.notification_fecha);
+            detail = (TextView) itemView.findViewById(R.id.notification_detail);
         }
 
         @Override

@@ -8,11 +8,14 @@ public class Notif {
 
     private int id_noti;
     private int id_evento_global;
+    private String nombre_evento_global;
     private int tipo;
+    private String nombre_tipo;
     private String fecha_dispara;
     private boolean entregada;
     private String usuario_recibe;
     private String condicion_dispara;
+
 
     public String getCondicion_dispara() {
         return condicion_dispara;
@@ -30,6 +33,22 @@ public class Notif {
         this.entregada = entregada;
         this.usuario_recibe = usuario_recibe;
         this.condicion_dispara = condicion_dispara;
+    }
+
+    public String getNombre_evento_global() {
+        return nombre_evento_global;
+    }
+
+    public void setNombre_evento_global(String nombre_evento_global) {
+        this.nombre_evento_global = nombre_evento_global;
+    }
+
+    public String getNombre_tipo() {
+        return nombre_tipo;
+    }
+
+    public void setNombre_tipo(String nombre_tipo) {
+        this.nombre_tipo = nombre_tipo;
     }
 
     public int getId_noti() {

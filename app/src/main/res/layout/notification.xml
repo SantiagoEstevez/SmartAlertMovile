@@ -6,26 +6,70 @@
     android:orientation="vertical"
     >
 
-    <TextView
-        android:id="@+id/notification_name"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="hola"
-        android:gravity="center_horizontal"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-        android:textSize="@dimen/textView_textsize_bigTitle"
-        android:padding="@dimen/editText_textsize_login"
-        />
+        android:orientation="vertical"
+        android:paddingVertical="@dimen/padding_horizontal_login"
+        >
 
-    <TextView
-        android:id="@+id/notification_fecha"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="hola"
-        android:gravity="center_horizontal"
-        android:textSize="20dp"
-        android:padding="@dimen/editText_textsize_login"
-        />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3"
+                android:gravity="left"
+                >
+
+                <TextView
+                    android:id="@+id/notification_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="hola"
+                    android:gravity="left|start"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                    android:textSize="20dp"
+                    android:paddingLeft="@dimen/editText_textsize_login"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.7"
+                android:gravity="right"
+                >
+
+                <TextView
+                    android:id="@+id/notification_fecha"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="fecha"
+                    android:gravity="right|start"
+                    android:textSize="15dp"
+                    android:paddingRight="@dimen/editText_textsize_login"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/notification_detail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="descripcion"
+            android:gravity="left|start"
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            android:textSize="15dp"
+            android:paddingLeft="@dimen/editText_textsize_login"
+            />
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"

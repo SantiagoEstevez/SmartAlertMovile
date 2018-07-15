@@ -112,6 +112,9 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_map) {
             Intent frmMain = new Intent(MainActivity.this, MapsActivity.class);
             startActivity(frmMain);
+        } else if (id == R.id.nav_logout) {
+            Intent frmLogin = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(frmLogin);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

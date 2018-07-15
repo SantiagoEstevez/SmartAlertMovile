@@ -104,7 +104,7 @@
                 android:id="@+id/drive_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="DRIVE"
+                android:text="DISCO"
                 android:textColor="@color/colorPrimaryText"
                 android:textSize="20dp"
                 android:textStyle="bold"/>

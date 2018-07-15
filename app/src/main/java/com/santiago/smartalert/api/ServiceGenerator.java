@@ -3,6 +3,8 @@ package com.santiago.smartalert.api;
 import android.text.TextUtils;
 import android.util.Log;
 
+import java.util.concurrent.TimeUnit;
+
 import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -15,7 +17,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ServiceGenerator {
     //private static final String BASE_URL = "http://172.16.104.78:8080/Proyecto2018/rest/";
     private static final String BASE_URL = "http://10.0.2.2:8080/Proyecto2018/rest/";
-    private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+    private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder()
+            .connectTimeout(1, TimeUnit.MINUTES)
+            .readTimeout(1, TimeUnit.MINUTES)
+            .writeTimeout(1, TimeUnit.MINUTES);
 
     private static Retrofit.Builder builder =
             new Retrofit.Builder()

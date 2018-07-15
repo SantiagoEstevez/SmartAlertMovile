@@ -1,6 +1,7 @@
 package com.santiago.smartalert.api;
 
 import com.santiago.smartalert.models.Event.Event;
+import com.santiago.smartalert.models.Event.EventType;
 import com.santiago.smartalert.models.Logs.IpData;
 import com.santiago.smartalert.models.Logs.LogApp;
 import com.santiago.smartalert.models.Node.NodeDrive;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
@@ -51,11 +53,15 @@ public interface ApiService {
                                        @Path(value = "from", encoded = true) String from,
                                        @Path(value = "to", encoded = true) String to);
 
+    @Headers("Accept: application/json")
     @GET("http://ipinfo.io/{ip}")
     Call<IpData> getIpData(@Path(value = "ip", encoded = true) String node);
     //-------------- LOG APLICACIONES -------------------
 
     //-------------- EVENTS -------------------
+    @GET("eventos/getTiposEventos")
+    Call<ArrayList<EventType>> getEventTypes();
+
     //@GET("events")
     @GET("eventos/getListaEventosG")
     Call<ArrayList<Event>> getEvents();
