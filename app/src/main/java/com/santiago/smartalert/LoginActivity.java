@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.santiago.smartalert.adapters.NodeAdapter;
@@ -25,17 +26,22 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
+    private ProgressBar progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        progress = (ProgressBar) findViewById(R.id.progressbar);
+        progress.setVisibility(View.INVISIBLE);
 
         //Boton login
         final Button btnLogin = (Button) findViewById(R.id.login);
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progress.setVisibility(View.VISIBLE);
+
                 String username = ((EditText) findViewById(R.id.username)).getText().toString();
                 String password = ((EditText) findViewById(R.id.password)).getText().toString();
 
@@ -71,17 +77,21 @@ public class LoginActivity extends AppCompatActivity {
                     token oToken = response.body();
                     AuthService.setToken(LoginActivity.this, oToken.getSecurityToken());
 
+                    progress.setVisibility(View.INVISIBLE);
                     Intent frmMain = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(frmMain);
                 }
                 else
                 {
+                    progress.setVisibility(View.INVISIBLE);
                     Toast.makeText(getApplicationContext(), "Datos incorrectos", Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<token> call, Throwable t) {
+                progress.setVisibility(View.INVISIBLE);
+                Toast.makeText(getApplicationContext(), "No se pudo conectar con el servidor", Toast.LENGTH_LONG).show();
                 Log.e("test", "error2");
             }
         });

@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.santiago.smartalert.R;
 import com.santiago.smartalert.adapters.EventAdapter;
@@ -31,13 +32,14 @@ public class NotificationFragment extends Fragment {
     private NotificationAdapter notificationAdapter;
     private ArrayList<EventType> eventTypes;
     private ArrayList<Event> events;
+    private ProgressBar progress;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
         rootView = inflater.inflate(R.layout.fragment_notification, container, false);
+        progress = (ProgressBar) rootView.findViewById(R.id.progressbar_notif);
 
         notificationAdapter = new NotificationAdapter(rootView.getContext());
         recyclerView = (RecyclerView) rootView.findViewById(R.id.notification);
@@ -127,6 +129,7 @@ public class NotificationFragment extends Fragment {
                         }
                     }
                     notificationAdapter.addList(notifs);
+                    progress.setVisibility(View.INVISIBLE);
                 }
                 else
                 {

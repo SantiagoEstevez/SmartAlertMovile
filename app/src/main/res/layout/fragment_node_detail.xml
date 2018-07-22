@@ -5,7 +5,15 @@
     android:layout_height="match_parent"
     tools:context="com.santiago.smartalert.views.NodeDetailFragment">
 
+    <ProgressBar
+        android:id="@+id/progressbar_node_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
+
     <LinearLayout
+        android:id="@+id/layout_node"
+        android:visibility="invisible"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -84,7 +92,7 @@
                 android:id="@+id/ram_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="RAM"
+                android:text="RAM (Mb)"
                 android:textColor="@color/colorPrimaryText"
                 android:textSize="20dp"
                 android:textStyle="bold"/>
@@ -104,7 +112,7 @@
                 android:id="@+id/drive_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="DISCO"
+                android:text="DISCO (Gb)"
                 android:textColor="@color/colorPrimaryText"
                 android:textSize="20dp"
                 android:textStyle="bold"/>

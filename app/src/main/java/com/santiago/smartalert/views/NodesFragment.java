@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.santiago.smartalert.R;
 import com.santiago.smartalert.adapters.NodeAdapter;
@@ -26,6 +27,7 @@ import retrofit2.Response;
 public class NodesFragment extends Fragment {
     private RecyclerView recyclerView;
     private NodeAdapter nodeAdapter;
+    private ProgressBar progress;
     Comunicador comunicador;
     View rootView;
 
@@ -38,6 +40,7 @@ public class NodesFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_nodes, container, false);
+        progress = (ProgressBar) rootView.findViewById(R.id.progressbar_node);
 
         nodeAdapter = new NodeAdapter(rootView.getContext());
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
@@ -84,6 +87,7 @@ public class NodesFragment extends Fragment {
                 {
                     ArrayList<String> nodes = response.body();
                     nodeAdapter.addList(nodes);
+                    progress.setVisibility(View.INVISIBLE);
                 }
                 else
                 {

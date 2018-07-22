@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
@@ -39,12 +41,17 @@ public class NodeDetailFragment extends Fragment {
     View rootView;
     PieChart chartRAM;
     PieChart chartDrive;
+    private ProgressBar progress;
+    private LinearLayout layout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         rootView = inflater.inflate(R.layout.fragment_node_detail, container, false);
+        progress = (ProgressBar) rootView.findViewById(R.id.progressbar_node_detail);
+        layout = (LinearLayout) rootView.findViewById(R.id.layout_node);
+
         String nodeName = getArguments().getString("nodeName");
 
         getNodeHead(nodeName);
@@ -200,5 +207,8 @@ public class NodeDetailFragment extends Fragment {
 
         chartDrive.setData(data);
         chartDrive.invalidate();
+
+        progress.setVisibility(View.INVISIBLE);
+        layout.setVisibility(View.VISIBLE);
     }
 }

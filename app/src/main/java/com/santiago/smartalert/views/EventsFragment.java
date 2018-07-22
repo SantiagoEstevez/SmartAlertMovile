@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.santiago.smartalert.R;
 import com.santiago.smartalert.adapters.EventAdapter;
@@ -27,13 +28,14 @@ public class EventsFragment extends Fragment {
     View rootView;
     private RecyclerView recyclerView;
     private EventAdapter eventAdapter;
+    private ProgressBar progress;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
         rootView = inflater.inflate(R.layout.fragment_events, container, false);
+        progress = (ProgressBar) rootView.findViewById(R.id.progressbar_event);
 
         eventAdapter = new EventAdapter(rootView.getContext());
         recyclerView = (RecyclerView) rootView.findViewById(R.id.events);
@@ -58,6 +60,7 @@ public class EventsFragment extends Fragment {
                 {
                     ArrayList<Event> events = response.body();
                     eventAdapter.addList(events);
+                    progress.setVisibility(View.INVISIBLE);
                 }
                 else
                 {

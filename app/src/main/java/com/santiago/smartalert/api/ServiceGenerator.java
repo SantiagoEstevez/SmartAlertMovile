@@ -15,8 +15,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class ServiceGenerator {
-    //private static final String BASE_URL = "http://172.16.104.78:8080/Proyecto2018/rest/";
-    private static final String BASE_URL = "http://10.0.2.2:8080/Proyecto2018/rest/";
+    private static final String BASE_URL = "http://192.168.43.125:8080/Proyecto2018/rest/";
+    //private static final String BASE_URL = "http://172.16.104.99:8080/Proyecto2018/rest/";
+    //private static final String BASE_URL = "http://10.0.2.2:8080/Proyecto2018/rest/";
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder()
             .connectTimeout(1, TimeUnit.MINUTES)
             .readTimeout(1, TimeUnit.MINUTES)

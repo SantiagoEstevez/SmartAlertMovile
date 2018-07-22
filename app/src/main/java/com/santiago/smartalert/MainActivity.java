@@ -130,6 +130,6 @@ public class MainActivity extends AppCompatActivity
         NodeDetailFragment nodeDetail = new NodeDetailFragment();
         nodeDetail.setArguments(bundle);
 
-        fragmentManager.beginTransaction().replace(R.id.contenedor, nodeDetail).detach(nodeDetail).attach(nodeDetail).addToBackStack(TAG_NODE).commit();
+        fragmentManager.beginTransaction().replace(R.id.contenedor, nodeDetail).addToBackStack(TAG_NODE).commit();
     }
 }

@@ -13,7 +13,7 @@
         android:text="hola"
         android:gravity="center_horizontal"
         android:textAppearance="@style/TextAppearance.AppCompat.Title"
-        android:textSize="@dimen/textView_textsize_bigTitle"
+        android:textSize="30dp"
         android:padding="@dimen/editText_textsize_login"
         />
 

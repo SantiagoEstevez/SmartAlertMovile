@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">SmartAlert</string>
-    <string name="title_activity_main">Smart Alert</string>
-    <string name="hint_username">Nombre de usuario:</string>
-    <string name="hint_password">password</string>
+    <string name="title_activity_main">SmartAlert</string>
+    <string name="hint_username">Usuario</string>
+    <string name="hint_password">Contraseña</string>
     <string name="btn_login">Login</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>

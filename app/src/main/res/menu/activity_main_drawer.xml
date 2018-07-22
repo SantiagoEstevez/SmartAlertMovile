@@ -7,7 +7,7 @@
         <item
             android:id="@+id/nav_nodes"
             android:icon="@drawable/ic_menu_send"
-            android:title="Nodes" />
+            android:title="Nodos" />
         <!--<item
             android:id="@+id/nav_apps"
             android:icon="@drawable/ic_menu_send"
@@ -15,12 +15,12 @@
         <item
             android:id="@+id/nav_events"
             android:icon="@drawable/ic_menu_send"
-            android:title="Events" />
+            android:title="Eventos" />
 
         <item
             android:id="@+id/nav_map"
             android:icon="@drawable/ic_menu_send"
-            android:title="Ip logs" />
+            android:title="Mapa logs" />
 
         <item
             android:id="@+id/nav_notif"
