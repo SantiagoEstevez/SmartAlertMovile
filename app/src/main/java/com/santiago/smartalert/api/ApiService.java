@@ -16,6 +16,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
+import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
@@ -75,7 +76,7 @@ public interface ApiService {
     Call<ResponseBody> disableEvent(@Path(value = "idEvento", encoded = true) String idEvent);
 
     //@PUT("events/suscribe/{idEvento}")
-    @PUT("eventos/sus_eg/{idEvento}")
+    @POST("eventos/sus_eg/{idEvento}")
     Call<ResponseBody> suscribeEvent(@Path(value = "idEvento", encoded = true) String idEvent);
 
     //@PUT("events/unsuscribe/{idEvento}")
