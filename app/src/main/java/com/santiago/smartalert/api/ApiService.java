@@ -49,7 +49,7 @@ public interface ApiService {
     //-------------- NODES -------------------
 
     //-------------- LOG APLICACIONES -------------------
-    @GET("info/infoAgente/{node}/{from}/{to}")
+    @GET("info/infoAgenteMapa/{node}/{from}/{to}")
     Call<ArrayList<LogApp>> getLogsApp(@Path(value = "node", encoded = true) String node,
                                        @Path(value = "from", encoded = true) String from,
                                        @Path(value = "to", encoded = true) String to);

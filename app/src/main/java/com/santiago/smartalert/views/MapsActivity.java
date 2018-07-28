@@ -123,7 +123,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     for (LogApp logapp : logs) {
                         String ip = logapp.getFromHostIp();
 
-                        if (!ip.isEmpty()) {
+                        if (ip!= null && !ip.isEmpty()) {
                             String[] ipFragments = ip.split("\\.");
 
                             String hola = ipFragments[0];
