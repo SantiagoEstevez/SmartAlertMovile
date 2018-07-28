@@ -85,7 +85,7 @@ public interface ApiService {
     //-------------- NODES -------------------
 
     //-------------- NOTIFICACIONES -------------------
-    @GET("notis/getNotisTodas")
+    @GET("notis/getMisNotis")
     Call<ArrayList<Notif>> getNotifications();
     //-------------- NOTIFICACIONES -------------------
 }

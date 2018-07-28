@@ -94,7 +94,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
         void onItemClick(int position, View v);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView title;
         private Switch suscripto;
@@ -102,17 +102,12 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
         public ViewHolder(View itemView) {
             super(itemView);
-            itemView.setOnClickListener(this);
+            //itemView.setOnClickListener(this);
             //itemView.setOnLongClickListener(this);
 
             title = (TextView) itemView.findViewById(R.id.event_name);
             suscripto = (Switch) itemView.findViewById(R.id.event_suscripto);
             activo = (RadioButton) itemView.findViewById(R.id.event_status);
-        }
-
-        @Override
-        public void onClick(View v) {
-            clickListener.onItemClick(getAdapterPosition(), v);
         }
     }
 
